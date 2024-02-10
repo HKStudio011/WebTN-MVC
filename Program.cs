@@ -1,3 +1,6 @@
+using System.Net;
+using WebTN_MVC.ExtendNethods;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -18,16 +21,22 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
+// Custom response error 400 -500
+app.AddStatusCodePages();
+
 app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+// endpoint
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.MapRazorPages();
+
 
 app.Run();
 
