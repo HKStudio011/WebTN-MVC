@@ -1,5 +1,6 @@
 using System.Net;
 using WebTN_MVC.ExtendNethods;
+using WebTN_MVC.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,6 +8,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddRazorPages();
+
+builder.Services.AddSingleton<PlanetServices>();
 
 var app = builder.Build();
 
@@ -30,6 +33,11 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 // endpoint
+
+app.MapAreaControllerRoute(
+    name: "product",
+    pattern: "{controller}/{action=Index}/{id?}",
+    areaName: "ProductManage");
 
 app.MapControllerRoute(
     name: "default",

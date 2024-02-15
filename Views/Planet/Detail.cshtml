@@ -1,0 +1,14 @@
+@model WebTN_MVC.Models.PlanetModel
+
+<h1>@Model.Name</h1>
+
+<div class="card w-50">
+    <img src="~/planet/@(Model.Name).jpg" alt="" />
+    <div class=" card-body">
+        <h5>@Model.VnName</h5>
+        <div class=" card-text">
+            @Model.Content
+        </div>
+    </div>
+    <a class=" card-link" asp-action="index"> Các hành tinh</a>
+</div>
