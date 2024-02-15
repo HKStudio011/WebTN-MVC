@@ -1,9 +1,15 @@
+using System.Net;
+using WebTN_MVC.ExtendNethods;
+using WebTN_MVC.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddRazorPages();
+
+builder.Services.AddSingleton<PlanetServices>();
 
 var app = builder.Build();
 
@@ -18,16 +24,27 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
+// Custom response error 400 -500
+app.AddStatusCodePages();
+
 app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+// endpoint
+
+app.MapAreaControllerRoute(
+    name: "product",
+    pattern: "{controller}/{action=Index}/{id?}",
+    areaName: "ProductManage");
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.MapRazorPages();
+
 
 app.Run();
 
