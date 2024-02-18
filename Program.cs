@@ -1,5 +1,7 @@
 using System.Net;
+using Microsoft.EntityFrameworkCore;
 using WebTN_MVC.ExtendNethods;
+using WebTN_MVC.Models;
 using WebTN_MVC.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,6 +12,13 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 
 builder.Services.AddSingleton<PlanetServices>();
+
+// DBcontext
+builder.Services.AddDbContext<AppDBContext>(options =>
+{
+    string connectString = builder.Configuration.GetConnectionString("DBContext");
+    options.UseSqlServer(connectString);
+});
 
 var app = builder.Build();
 
@@ -38,6 +47,11 @@ app.MapAreaControllerRoute(
     name: "product",
     pattern: "{controller}/{action=Index}/{id?}",
     areaName: "ProductManage");
+
+app.MapAreaControllerRoute(
+    name: "database",
+    pattern: "{controller}/{action=Index}",
+    areaName: "Database");
 
 app.MapControllerRoute(
     name: "default",
