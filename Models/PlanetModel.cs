@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace WebTN_MVC.Models
 {
     public class PlanetModel

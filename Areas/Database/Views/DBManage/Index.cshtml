@@ -1,0 +1,75 @@
+@using Microsoft.EntityFrameworkCore
+@using System.Data;
+
+@inject AppDBContext dBContext
+
+@{
+    ViewData["Title"] = "Thông tin database";
+    var connect = dBContext.Database.GetDbConnection();
+    var dBName = connect.Database;
+    var canConnect = dBContext.Database.CanConnect();
+    var migrationPending = dBContext.Database.GetPendingMigrations();
+    var migrationApplied = dBContext.Database.GetAppliedMigrations();
+}
+
+<partial name="_AlertMessage"></partial>
+
+<h2>Thông tin:</h2>
+<ul>
+    <li>
+        <p>Database: @dBName</p>
+    </li>
+    <li>
+        <p>Source: @connect.DataSource</p>
+    </li>
+    <li>
+        <p>State: @connect.State</p>
+    </li>
+</ul>
+<hr>
+<h2>Mirations</h2>
+<ul>
+    @foreach (var item in migrationApplied)
+    {
+        <li>
+            <p>@item</p>
+        </li>
+    }
+    @foreach (var item in migrationPending)
+    {
+        <li>
+            <p>@item (Pendeing)</p>
+        </li>
+    }
+</ul>
+@if (dBContext.Database.GetPendingMigrations().Any())
+{
+    <form method="post">
+        <button type="submit" class=" btn btn-primary" asp-action="ApplyMigration">Apply Migration</button>
+    </form>
+}
+
+<hr>
+<h2>Các bảng</h2>
+@if (!canConnect)
+{
+    <p class="alert alert-danger">Không có kết nối Database.</p>
+}
+else
+{
+    if (connect.State != ConnectionState.Open)
+    {
+        await dBContext.Database.OpenConnectionAsync();
+    }
+
+    var tables = connect.GetSchema("Tables");
+    <ul>
+        @foreach (DataRow row in tables.Rows)
+        {
+            <li>
+                <p>@row["TABLE_NAME"]</p>
+            </li>
+        }
+    </ul>
+    <a class=" btn btn-danger" asp-action="DeleteDB">Xoá Database</a>
+}

@@ -1,4 +1,3 @@
-
 # CLI Tools
 
 - Cài đặt lệnh ``dotnet aspnet-codegenerator``
@@ -151,4 +150,40 @@ dotnet ef migrations add init
 
 # Cập nhật migration cuối lên SQL Server
 dotnet ef database update
+```
+
+## appsettings.json
+
+```
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "AllowedHosts": "*",
+  "ConnectionStrings": {
+    "DBContext" : "Server=localhost,1433; Database=DatabaseEFMVC; Encrypt=true; TrustServerCertificate=true; Integrated Security=true;"
+  },
+  "MailSettings": {
+    "Mail": "",
+    "DisplayName": "",
+    "Password": "",
+    "Host": "smtp.gmail.com",
+    "Port": 587
+  },
+
+  "Authentication": {
+    "Google": {
+      "ClientId": "",
+      "ClientSecret": ""
+    }, 
+    "Facebook": {
+      "AppId": "",
+      "AppSecret": ""
+    }
+  }
+}
+
 ```

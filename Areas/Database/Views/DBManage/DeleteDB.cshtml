@@ -1,0 +1,12 @@
+@{
+    ViewData["Title"] = "Xoá Database";
+}
+<h1> @ViewData["Title"]</h1>
+<hr>
+<p class=" alert alert-danger">Bạn có chắc muốn xoá Database?</p>
+<form method="post">
+    <div class="form-group">
+        <button type="submit" class="btn btn-danger">Xoá</button>
+        <a class="btn btn-primary" asp-action="Index">Thông tin Database</a>
+    </div>
+</form>
