@@ -8,6 +8,7 @@ namespace WebTN_MVC.Models
         {
         }
 
+        public DbSet<Contact.Contact> Contacts { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

@@ -15,7 +15,6 @@ namespace WebTN_MVC.Areas.Database.Controllers
         {
             _appDBContext = appDBContext;
         }
-
         // GET: DBManage
         public ActionResult Index()
         {
