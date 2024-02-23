@@ -1,5 +1,7 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using WebTN_MVC.Data;
 using WebTN_MVC.Models;
 
 namespace WebTN_MVC.Areas.Database.Controllers
@@ -9,12 +11,19 @@ namespace WebTN_MVC.Areas.Database.Controllers
     public class DBManage : Controller
     {
         private readonly AppDBContext _appDBContext;
-        [TempData]
-        public string StatusMessage { get; set; }
-        public DBManage(AppDBContext appDBContext)
+        private readonly UserManager<AppUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
+
+        public DBManage(AppDBContext appDBContext, UserManager<AppUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             _appDBContext = appDBContext;
+            _userManager = userManager;
+            _roleManager = roleManager;
         }
+
+        [TempData]
+        public string StatusMessage { get; set; }
+
         // GET: DBManage
         public ActionResult Index()
         {
@@ -40,6 +49,36 @@ namespace WebTN_MVC.Areas.Database.Controllers
         {
             await _appDBContext.Database.MigrateAsync();
             StatusMessage = "Cập nhật Database thành công.";
+            return RedirectToAction("Index");
+        }
+
+        public async Task<IActionResult> SendDataAsync()
+        {
+            var roleNames = typeof(RoleName).GetFields().ToList();
+            foreach (var r in roleNames)
+            {
+                var roleName = r.GetRawConstantValue() as string;
+                var role = await _roleManager.FindByNameAsync(roleName);
+                if (role == null)
+                {
+                    await _roleManager.CreateAsync(new IdentityRole(roleName));
+                }
+            }
+
+            // admin, pass = admin123, email = admin@example.com
+            var admin = await _userManager.FindByNameAsync("admin");
+            if (admin == null)
+            {
+                admin = new AppUser()
+                {
+                    UserName = "admin",
+                    Email = "admin@example.com",
+                    EmailConfirmed = true,
+                };
+                await _userManager.CreateAsync(admin, password: "admin123");
+                await _userManager.AddToRoleAsync(admin, RoleName.Administrator);
+            }
+            StatusMessage = "Vừa send data";
             return RedirectToAction("Index");
         }
     }

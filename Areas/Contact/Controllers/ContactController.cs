@@ -7,12 +7,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using WebTN_MVC.Controllers;
+using WebTN_MVC.Data;
 using WebTN_MVC.Models;
 using WebTN_MVC.Models.Contact;
 
 namespace WebTN_MVC.Areas.Contact.Controllers
 {
     [Area("Contact")]
+    [Authorize(Roles = RoleName.Administrator)]
     public class ContactController : Controller
     {
         private readonly AppDBContext _context;
