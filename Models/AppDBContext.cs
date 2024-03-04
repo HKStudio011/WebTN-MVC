@@ -2,6 +2,7 @@ using WebTN_MVC.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using WebTN_MVC.Models.Blog;
 
 namespace WebTN_MVC.Models
 {
@@ -12,6 +13,7 @@ namespace WebTN_MVC.Models
         }
 
         public DbSet<Contact.Contact> Contacts { get; set; }
+        public DbSet<Category> Categories { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -30,6 +32,11 @@ namespace WebTN_MVC.Models
                     item.SetTableName(tableName.Substring(6));// or Replace("AspNet","")
                 }
             }
+
+            modelBuilder.Entity<Category>(entity =>
+            {
+                entity.HasIndex(c => c.Slug);
+            });
         }
     }
 }

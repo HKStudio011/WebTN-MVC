@@ -2,7 +2,7 @@
 @inject IAuthorizationService authorization
 
 @{
-    var result = await authorization.AuthorizeAsync(this.User,"ViewManageMenu");
+    var result = await authorization.AuthorizeAsync(this.User, "ViewManageMenu");
 }
 @if (result.Succeeded)
 {
@@ -10,7 +10,7 @@
         <a class="btn btn-outline-danger dropdown-toggle" href="#" id="managedropdownmenu" data-bs-toggle="dropdown">
             Manage
         </a>
-        <div class=" dropdown-menu" aria-labelledby="managedropdownmenu">
+        <div class=" dropdown-menu  dropdown-menu-start " aria-labelledby="managedropdownmenu">
             <a class="dropdown-item" asp-action="Index" asp-controller="DbManage" asp-area="Database">
                 Database
             </a>
@@ -22,6 +22,9 @@
             </a>
             <a class="dropdown-item" asp-action="Index" asp-controller="User" asp-area="Identity">
                 Quản lý user
+            </a>
+            <a class="dropdown-item" asp-action="Index" asp-controller="Category" asp-area="Blog">
+                Quản lý chuyên mục blog
             </a>
         </div>
     </div>
