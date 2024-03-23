@@ -14,6 +14,9 @@ namespace WebTN_MVC.Models
 
         public DbSet<Contact.Contact> Contacts { get; set; }
         public DbSet<Category> Categories { get; set; }
+        public DbSet<Post> Posts { get; set; }
+        public DbSet<PostCategory> PostCategorys { get; set; }
+
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -35,7 +38,17 @@ namespace WebTN_MVC.Models
 
             modelBuilder.Entity<Category>(entity =>
             {
-                entity.HasIndex(c => c.Slug);
+                entity.HasIndex(c => c.Slug).IsUnique();
+            });
+
+            modelBuilder.Entity<PostCategory>(entity =>
+            {
+                entity.HasKey(pc => new { pc.PostID, pc.CategoryID });
+            });
+
+            modelBuilder.Entity<Post>(entity =>
+            {
+                entity.HasIndex(p => p.Slug).IsUnique();
             });
         }
     }

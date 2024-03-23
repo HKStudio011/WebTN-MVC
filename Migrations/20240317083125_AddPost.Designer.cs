@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebTN_MVC.Models;
 
@@ -11,9 +12,11 @@ using WebTN_MVC.Models;
 namespace WebTN_MVC.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    partial class AppDBContextModelSnapshot : ModelSnapshot
+    [Migration("20240317083125_AddPost")]
+    partial class AddPost
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -270,6 +273,7 @@ namespace WebTN_MVC.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PostId"));
 
                     b.Property<string>("AuthorId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Content")
@@ -422,7 +426,9 @@ namespace WebTN_MVC.Migrations
                 {
                     b.HasOne("WebTN_MVC.Models.AppUser", "Author")
                         .WithMany()
-                        .HasForeignKey("AuthorId");
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Author");
                 });

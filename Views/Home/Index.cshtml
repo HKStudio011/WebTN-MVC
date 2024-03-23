@@ -8,3 +8,9 @@
 </div>
 
 <textarea id="SummernoteEditor"> </textarea>
+
+@{
+    var summernoteModel = new WebTN_MVC.Models.Summernote("SummernoteEditor");
+}
+
+<partial name="_Summernote" model="summernoteModel"></partial>

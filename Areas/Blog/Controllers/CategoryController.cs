@@ -12,7 +12,7 @@ using WebTN_MVC.Data;
 using WebTN_MVC.Models;
 using WebTN_MVC.Models.Blog;
 
-namespace WebTN_MVC.Area_Blog_Controllers_
+namespace WebTN_MVC.Areas.Blog.Controllers
 {
     [Area("Blog")]
     [Route("/admin/blog/category/{action}/{id?}")]
@@ -158,12 +158,47 @@ namespace WebTN_MVC.Area_Blog_Controllers_
                 return NotFound();
             }
 
-            if (category.Id == category.ParentCategoryId)
+            bool canUpdate = true;
+
+            if (category.ParentCategoryId == category.Id)
             {
-                ModelState.AddModelError(string.Empty, "Phải chọn danh mục cha khác.");
+                ModelState.AddModelError(string.Empty, "Phải chọn danh mục cha khác");
+                canUpdate = false;
             }
 
-            if (ModelState.IsValid && category.Id != category.ParentCategoryId)
+            // Kiem tra thiet lap muc cha phu hop
+            if (canUpdate && category.ParentCategoryId != null)
+            {
+                var childCates =
+                            (from c in _context.Categories select c)
+                            .Include(c => c.CategoryChildren)
+                            .ToList()
+                            .Where(c => c.ParentCategoryId == category.Id);
+
+
+                // Func check Id 
+                Func<List<Category>, bool> checkCateIds = null;
+                checkCateIds = (cates) =>
+                    {
+                        foreach (var cate in cates)
+                        {
+                            if (cate.Id == category.ParentCategoryId)
+                            {
+                                canUpdate = false;
+                                ModelState.AddModelError(string.Empty, "Phải chọn danh mục cha khác");
+                                return true;
+                            }
+                            if (cate.CategoryChildren != null)
+                                return checkCateIds(cate.CategoryChildren.ToList());
+
+                        }
+                        return false;
+                    };
+                // End Func 
+                checkCateIds(childCates.ToList());
+            }
+
+            if (ModelState.IsValid && canUpdate)
             {
                 try
                 {

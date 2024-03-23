@@ -147,3 +147,6 @@ app.MapRazorPages();
 
 app.Run();
 
+
+//// dotnet aspnet-codegenerator controller -name Contact -namespace WebTN_MVC.Areas.Contact.Controllers -m WebTN_MVC.Models.Contact.Contact -dc WebTN_MVC.Models.AppDBContext -udl -outDir Areas/Contact/ 
+

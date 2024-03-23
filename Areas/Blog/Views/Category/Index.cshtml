@@ -38,7 +38,7 @@
         string prefix = string.Concat(Enumerable.Repeat("&nbsp;&nbsp;", level));
         <tr>
             <td>
-                @Html.Raw(prefix) 
+                @Html.Raw(prefix)
                 <a asp-action="Edit" asp-route-id="@item.Id">
                     @Html.DisplayFor(modelItem => item.Title)
                 </a>
@@ -47,8 +47,8 @@
                 @Html.DisplayFor(modelItem => item.Slug)
             </td>
             <td>
-                <a asp-action="Details" asp-route-id="@item.Id">Chi tiết</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Xoá</a>
+                <a class="btn btn-success" asp-action="Details" asp-route-id="@item.Id">Chi tiết</a> |
+                <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id">Xoá</a>
             </td>
         </tr>
         if (item.CategoryChildren.Count > 0)
