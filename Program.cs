@@ -1,11 +1,11 @@
 using System.Net;
-using WebTN_MVC.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using WebTN_MVC.ExtendNethods;
 using WebTN_MVC.Models;
 using WebTN_MVC.Services;
 using WebTN_MVC.Data;
+using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -111,7 +111,13 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
 app.UseStaticFiles();
+app.UseStaticFiles(new StaticFileOptions() 
+{
+    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(),"Uploads")),
+    RequestPath = "/contents"
+});
 
 // Custom response error 400 -500
 app.AddStatusCodePages();
