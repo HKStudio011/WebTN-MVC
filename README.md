@@ -152,6 +152,12 @@ dotnet ef migrations add init
 dotnet ef database update
 ```
 
+## GULP
+
+npm update
+gulp
+gulp watch
+
 ## appsettings.json
 
 ```
