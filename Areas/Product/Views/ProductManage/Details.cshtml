@@ -1,4 +1,4 @@
-@model WebTN_MVC.Models.Blog.Post
+@model WebTN_MVC.Models.Product.Product
 
 @{
     ViewData["Title"] = Model.Title;
@@ -20,6 +20,12 @@
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Slug)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Price)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Price)
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Content)
@@ -54,6 +60,6 @@
     </dl>
 </div>
 <div>
-    <a class="btn btn-primary" asp-action="Edit" asp-route-id="@Model?.PostId">Sửa</a> |
-    <a asp-action="Index">Danh sách bài viết</a>
+    <a class="btn btn-primary" asp-action="Edit" asp-route-id="@Model?.ProductId">Sửa</a> |
+    <a asp-action="Index">Danh sách sản phẩm</a>
 </div>

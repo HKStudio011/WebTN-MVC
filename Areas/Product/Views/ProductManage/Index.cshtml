@@ -1,0 +1,73 @@
+@model IEnumerable<WebTN_MVC.Models.Product.Product>
+
+@{
+    ViewData["Title"] = "Danh sách sản phẩm";
+}
+<h1>@ViewData["Title"]</h1>
+@* <partial name="_AlertMessage" /> *@
+<p>
+    <a class="btn btn-primary" asp-action="Create">Tạo sản phẩm mới</a>
+</p>
+<p>Tổng số sản phẩm: @ViewBag.totalProducts</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                STT
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Published)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Author)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateUpdated)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @(++ViewBag.productIndex)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.ProductId">
+                        @Html.DisplayFor(modelItem => item.Title)
+                    </a>
+                    <br>
+                    <small>
+                        @string.Join(", ", item.ProductCategoryProducts.Select(pc => pc.Category.Title))
+                    </small>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Price)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Published)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Author.UserName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DateUpdated)
+                </td>
+                <td>
+                    <a class="btn btn-success" asp-action="Details" asp-route-id="@item.ProductId">Chi tiết</a>
+                    <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.ProductId">Xoá</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<partial name="_PagingXTL" model="@ViewBag.pagingmodel" />

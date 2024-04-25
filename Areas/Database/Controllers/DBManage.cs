@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using WebTN_MVC.Data;
 using WebTN_MVC.Models;
 using WebTN_MVC.Models.Blog;
+using WebTN_MVC.Models.Product;
 
 namespace WebTN_MVC.Areas.Database.Controllers
 {
@@ -14,14 +15,14 @@ namespace WebTN_MVC.Areas.Database.Controllers
     [Authorize(Roles = RoleName.Administrator)]
     public class DBManage : Controller
     {
-        private readonly AppDBContext _appDBContext;
+        private readonly AppDBContext _dBContext;
         private readonly UserManager<AppUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly SignInManager<AppUser> _signInManager;
 
         public DBManage(AppDBContext appDBContext, UserManager<AppUser> userManager, RoleManager<IdentityRole> roleManager, SignInManager<AppUser> signInManager)
         {
-            _appDBContext = appDBContext;
+            _dBContext = appDBContext;
             _userManager = userManager;
             _roleManager = roleManager;
             _signInManager = signInManager;
@@ -45,7 +46,7 @@ namespace WebTN_MVC.Areas.Database.Controllers
         [HttpPost]
         public async Task<IActionResult> DeleteDBAsync()
         {
-            var success = await _appDBContext.Database.EnsureDeletedAsync();
+            var success = await _dBContext.Database.EnsureDeletedAsync();
             StatusMessage = success ? "Xoá Database thành công." : "Không thể xoá Database!!!";
             return RedirectToAction("Index");
         }
@@ -53,7 +54,7 @@ namespace WebTN_MVC.Areas.Database.Controllers
         [HttpPost]
         public async Task<IActionResult> ApplyMigrationAsync()
         {
-            await _appDBContext.Database.MigrateAsync();
+            await _dBContext.Database.MigrateAsync();
             StatusMessage = "Cập nhật Database thành công.";
             return RedirectToAction("Index");
         }
@@ -88,16 +89,89 @@ namespace WebTN_MVC.Areas.Database.Controllers
             await _signInManager.SignInAsync(admin,isPersistent:false);
 
             SenDPostCategory();
+            SeedProductCategory();
 
             StatusMessage = "Vừa send data";
             return RedirectToAction("Index");
         }
 
+        private void SeedProductCategory()
+        {
+        
+            _dBContext.CategoryProducts.RemoveRange(_dBContext.CategoryProducts.Where(c => c.Description.Contains("[fakeData]")));
+            _dBContext.Products.RemoveRange(_dBContext.Products.Where(p => p.Content.Contains("[fakeData]")));
+
+            _dBContext.SaveChanges();
+
+             var fakerCategory = new Faker<CategoryProduct>();
+             int cm = 1;
+             fakerCategory.RuleFor( c => c.Title,  fk => $"Nhom SP{cm++} " + fk.Lorem.Sentence(1,2).Trim('.'));
+             fakerCategory.RuleFor( c => c.Description,  fk => fk.Lorem.Sentences(5) + "[fakeData]");
+             fakerCategory.RuleFor( c => c.Slug,  fk => fk.Lorem.Slug());
+
+           
+
+            var cate1 = fakerCategory.Generate();
+            var cate11 = fakerCategory.Generate();
+            var cate12 = fakerCategory.Generate();
+            var cate2 = fakerCategory.Generate();
+            var cate21 = fakerCategory.Generate();
+            var cate211 = fakerCategory.Generate();
+
+
+             cate11.ParentCategory  = cate1;
+             cate12.ParentCategory  = cate1;
+             cate21.ParentCategory = cate2;
+             cate211.ParentCategory = cate21;
+
+             var categories = new CategoryProduct[] { cate1, cate2, cate12, cate11, cate21, cate211};
+            _dBContext.CategoryProducts.AddRange(categories);
+            
+
+
+            // POST
+            var rCateIndex = new Random();
+            int bv = 1;
+
+            var user = _userManager.GetUserAsync(this.User).Result;
+            var fakerProduct = new Faker< WebTN_MVC.Models.Product.Product>();
+            fakerProduct.RuleFor(p => p.AuthorId, f => user.Id);
+            fakerProduct.RuleFor(p => p.Content, f => f.Commerce.ProductDescription() +"[fakeData]");
+            fakerProduct.RuleFor(p => p.DateCreated, f => f.Date.Between(new DateTime(2021,1,1), new DateTime(2021,7,1)));
+            fakerProduct.RuleFor(p => p.Description, f => f.Lorem.Sentences(3));
+            fakerProduct.RuleFor(p => p.Published, f => true);
+            fakerProduct.RuleFor(p => p.Slug, f => f.Lorem.Slug());
+            fakerProduct.RuleFor(p => p.Title, f => $"SP {bv++} " + f.Commerce.ProductName()); 
+            fakerProduct.RuleFor(p => p.Price,  f => int.Parse(f.Commerce.Price(500, 1000, 0)));
+         
+            List<WebTN_MVC.Models.Product.Product> products = new List<WebTN_MVC.Models.Product.Product>();
+            List<ProductCategoryProduct> product_categories = new List<ProductCategoryProduct>();
+
+
+            for (int i = 0; i < 40; i++)
+            {
+                var product = fakerProduct.Generate();
+                product.DateUpdated = product.DateCreated;
+                products.Add(product);
+                product_categories.Add(new ProductCategoryProduct() { 
+                    Product = product,
+                    Category = categories[rCateIndex.Next(5)]
+                });
+            } 
+
+            _dBContext.AddRange(products);
+            _dBContext.AddRange(product_categories); 
+            // END POST
+
+            _dBContext.SaveChanges();
+        }
+
         private void SenDPostCategory()
         {
-            _appDBContext.Categories.RemoveRange(_appDBContext.Categories.Where(c => c.Description.Contains("[fakeData]")));
-            _appDBContext.Posts.RemoveRange(_appDBContext.Posts.Where(p => p.Content.Contains("[fakeData]")));
+            _dBContext.Categories.RemoveRange(_dBContext.Categories.Where(c => c.Description.Contains("[fakeData]")));
+            _dBContext.Posts.RemoveRange(_dBContext.Posts.Where(p => p.Content.Contains("[fakeData]")));
 
+            _dBContext.SaveChanges();
 
             var fakerCategory = new Faker<Category>();
             int cm = 1;
@@ -125,7 +199,7 @@ namespace WebTN_MVC.Areas.Database.Controllers
             cate211.ParentCategory = cate21;
 
             var categories = new Category[] { cate1, cate2, cate12, cate11, cate21, cate211 };
-            _appDBContext.Categories.AddRange(categories);
+            _dBContext.Categories.AddRange(categories);
 
 
 
@@ -159,11 +233,11 @@ namespace WebTN_MVC.Areas.Database.Controllers
                 });
             }
 
-            _appDBContext.AddRange(posts);
-            _appDBContext.AddRange(post_categories);
+            _dBContext.AddRange(posts);
+            _dBContext.AddRange(post_categories);
             // END POST
 
-            _appDBContext.SaveChanges();
+            _dBContext.SaveChanges();
         }
     }
 }

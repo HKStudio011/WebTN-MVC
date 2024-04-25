@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using WebTN_MVC.Models.Blog;
+using WebTN_MVC.Models.Product;
 
 namespace WebTN_MVC.Models
 {
@@ -16,6 +17,9 @@ namespace WebTN_MVC.Models
         public DbSet<Category> Categories { get; set; }
         public DbSet<Post> Posts { get; set; }
         public DbSet<PostCategory> PostCategorys { get; set; }
+        public DbSet<CategoryProduct> CategoryProducts { get; set; }
+        public DbSet<Product.Product> Products { get; set; }
+        public DbSet<ProductCategoryProduct>  ProductCategoryProducts { get; set; }
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -47,6 +51,21 @@ namespace WebTN_MVC.Models
             });
 
             modelBuilder.Entity<Post>(entity =>
+            {
+                entity.HasIndex(p => p.Slug).IsUnique();
+            });
+
+            modelBuilder.Entity<CategoryProduct>(entity =>
+            {
+                entity.HasIndex(c => c.Slug).IsUnique();
+            });
+
+            modelBuilder.Entity<ProductCategoryProduct>(entity =>
+            {
+                entity.HasKey(pc => new { pc.ProductID, pc.CategoryID });
+            });
+
+            modelBuilder.Entity<Product.Product>(entity =>
             {
                 entity.HasIndex(p => p.Slug).IsUnique();
             });

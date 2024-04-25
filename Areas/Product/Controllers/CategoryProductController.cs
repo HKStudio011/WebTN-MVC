@@ -10,19 +10,19 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Org.BouncyCastle.Asn1.Cms;
 using WebTN_MVC.Data;
 using WebTN_MVC.Models;
-using WebTN_MVC.Models.Blog;
+using WebTN_MVC.Models.Product;
 
-namespace WebTN_MVC.Areas.Blog.Controllers
+namespace WebTN_MVC.Areas.Product.Controllers
 {
-    [Area("Blog")]
-    [Route("/admin/blog/category/{action}/{id?}")]
+    [Area("Product")]
+    [Route("/admin/product/category/{action}/{id?}")]
     [Authorize(Roles = RoleName.Administrator)]
-    public class CategoryController : Controller
+    public class CategoryProductController : Controller
     {
         private readonly AppDBContext _context;
-        private readonly ILogger<CategoryController> _logger;
+        private readonly ILogger<CategoryProductController> _logger;
 
-        public CategoryController(AppDBContext context, ILogger<CategoryController> loger)
+        public CategoryProductController(AppDBContext context, ILogger<CategoryProductController> loger)
         {
             _context = context;
             _logger = loger;
@@ -32,7 +32,7 @@ namespace WebTN_MVC.Areas.Blog.Controllers
         // GET: Category
         public async Task<IActionResult> Index()
         {
-            var pr = (from c in _context.Categories select c)
+            var pr = (from c in _context.CategoryProducts select c)
                     .Include(c => c.ParentCategory)
                     .Include(c => c.CategoryChildren);
 
@@ -50,7 +50,7 @@ namespace WebTN_MVC.Areas.Blog.Controllers
                 return NotFound();
             }
 
-            var category = await _context.Categories
+            var category = await _context.CategoryProducts
                 .Include(c => c.ParentCategory)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (category == null)
@@ -68,12 +68,12 @@ namespace WebTN_MVC.Areas.Blog.Controllers
             return View();
         }
 
-        private void CreateSelectListItem(List<Category> source, List<Category> des, int level)
+        private void CreateSelectListItem(List<CategoryProduct> source, List<CategoryProduct> des, int level)
         {
             foreach (var item in source)
             {
                 string prefix = string.Concat(Enumerable.Repeat("----", level));
-                des.Add(new Category()
+                des.Add(new CategoryProduct()
                 {
                     Id = item.Id,
                     Title = prefix + " " + item.Title
@@ -87,7 +87,7 @@ namespace WebTN_MVC.Areas.Blog.Controllers
 
         private async Task<SelectList> GetSelectList()
         {
-            var pr = (from c in _context.Categories select c)
+            var pr = (from c in _context.CategoryProducts select c)
                         .Include(c => c.ParentCategory)
                         .Include(c => c.CategoryChildren);
 
@@ -95,13 +95,13 @@ namespace WebTN_MVC.Areas.Blog.Controllers
                             .Where(c => c.ParentCategory == null)
                             .ToList();
 
-            categories.Insert(0, new Category()
+            categories.Insert(0, new CategoryProduct()
             {
                 Id = -1,
                 Title = "Không có danh mục cha"
             });
 
-            var listItem = new List<Category>();
+            var listItem = new List<CategoryProduct>();
 
             CreateSelectListItem(categories, listItem, 0);
 
@@ -115,7 +115,7 @@ namespace WebTN_MVC.Areas.Blog.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Description,Slug,ParentCategoryId")] Category category)
+        public async Task<IActionResult> Create([Bind("Id,Title,Description,Slug,ParentCategoryId")] CategoryProduct category)
         {
             if (ModelState.IsValid)
             {
@@ -137,7 +137,7 @@ namespace WebTN_MVC.Areas.Blog.Controllers
                 return NotFound();
             }
 
-            var category = await _context.Categories.FindAsync(id);
+            var category = await _context.CategoryProducts.FindAsync(id);
             if (category == null)
             {
                 return NotFound();
@@ -151,7 +151,7 @@ namespace WebTN_MVC.Areas.Blog.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,Slug,ParentCategoryId")] Category category)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,Slug,ParentCategoryId")] CategoryProduct category)
         {
             if (id != category.Id)
             {
@@ -170,14 +170,14 @@ namespace WebTN_MVC.Areas.Blog.Controllers
             if (canUpdate && category.ParentCategoryId != null)
             {
                 var childCates =
-                            (from c in _context.Categories select c)
+                            (from c in _context.CategoryProducts select c)
                             .Include(c => c.CategoryChildren)
                             .ToList()
                             .Where(c => c.ParentCategoryId == category.Id);
 
 
                 // Func check Id 
-                Func<List<Category>, bool> checkCateIds = null;
+                Func<List<CategoryProduct>, bool> checkCateIds = null;
                 checkCateIds = (cates) =>
                     {
                         foreach (var cate in cates)
@@ -204,7 +204,7 @@ namespace WebTN_MVC.Areas.Blog.Controllers
                 {
                     if (category.ParentCategoryId == -1) category.ParentCategoryId = null;
 
-                    var dtc = _context.Categories.FirstOrDefault(c => c.Id == id);
+                    var dtc = _context.CategoryProducts.FirstOrDefault(c => c.Id == id);
                     _context.Entry(dtc).State = EntityState.Detached;
 
                     _context.Update(category);
@@ -235,7 +235,7 @@ namespace WebTN_MVC.Areas.Blog.Controllers
                 return NotFound();
             }
 
-            var category = await _context.Categories
+            var category = await _context.CategoryProducts
                 .Include(c => c.ParentCategory)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (category == null)
@@ -251,7 +251,7 @@ namespace WebTN_MVC.Areas.Blog.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var category = await _context.Categories.Include(c => c.CategoryChildren)
+            var category = await _context.CategoryProducts.Include(c => c.CategoryChildren)
                                                     .FirstOrDefaultAsync(c => c.Id == id);
             if (category == null)
             {
@@ -263,14 +263,14 @@ namespace WebTN_MVC.Areas.Blog.Controllers
                 categoryChildren.ParentCategoryId = category.ParentCategoryId;
             }
 
-            _context.Categories.Remove(category);
+            _context.CategoryProducts.Remove(category);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool CategoryExists(int id)
         {
-            return _context.Categories.Any(e => e.Id == id);
+            return _context.CategoryProducts.Any(e => e.Id == id);
         }
     }
 }

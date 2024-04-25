@@ -1,0 +1,18 @@
+@model WebTN_MVC.Models.Product.Product
+
+@{
+    ViewData["Title"] = "Xoá sản phẩm";
+}
+
+<h1>Delete</h1>
+
+<p>Có chắc muốn xoá sản phẩm?</p>
+<div>
+    <h4>@Model.Title</h4>
+    <hr />
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="ProductId" />
+        <input type="submit" value="Xoá" class="btn btn-danger" /> |
+        <a asp-action="Index">Danh sách sản phẩm</a>
+    </form>
+</div>
