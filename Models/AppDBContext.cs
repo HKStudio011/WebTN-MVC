@@ -20,6 +20,7 @@ namespace WebTN_MVC.Models
         public DbSet<CategoryProduct> CategoryProducts { get; set; }
         public DbSet<Product.Product> Products { get; set; }
         public DbSet<ProductCategoryProduct>  ProductCategoryProducts { get; set; }
+        public DbSet<ProductPhoto>  ProductPhotos { get; set; }
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

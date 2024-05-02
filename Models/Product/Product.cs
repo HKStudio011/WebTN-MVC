@@ -45,5 +45,7 @@ namespace WebTN_MVC.Models.Product
         public decimal Price { get; set; }
 
         public List<ProductCategoryProduct>? ProductCategoryProducts { get; set; }
+
+        public List<ProductPhoto> Photos { get; set; }
     }
 }
