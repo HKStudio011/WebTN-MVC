@@ -100,6 +100,14 @@ builder.Services.AddAuthorization(options =>
     });
 });
 
+builder.Services.AddDistributedMemoryCache();           // Đăng ký dịch vụ lưu cache trong bộ nhớ (Session sẽ sử dụng nó)
+builder.Services.AddSession(cfg => {                    // Đăng ký dịch vụ Session
+    cfg.Cookie.Name = "WebTN_MVC";             // Đặt tên Session - tên này sử dụng ở Browser (Cookie)
+    cfg.IdleTimeout = new TimeSpan(0,30, 0);    // Thời gian tồn tại của Session
+});
+
+builder.Services.AddTransient<CartService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline .
@@ -111,6 +119,8 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseSession();
 
 app.UseStaticFiles();
 app.UseStaticFiles(new StaticFileOptions() 
