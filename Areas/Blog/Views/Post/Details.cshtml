@@ -1,10 +1,10 @@
 @model WebTN_MVC.Models.Blog.Post
-
+@inject AdminSidebarService _AdminSidebarService
 @{
     ViewData["Title"] = Model.Title;
 }
 
-<h1>@ViewData["Title"]</h1>
+
 
 <div>
     <hr />
@@ -57,3 +57,12 @@
     <a class="btn btn-primary" asp-action="Edit" asp-route-id="@Model?.PostId">Sửa</a> |
     <a asp-action="Index">Danh sách bài viết</a>
 </div>
+
+@{
+    _AdminSidebarService.SetActive("Post", "Index", "Blog");
+}
+
+@section Sidebar
+{
+    @Html.Raw(_AdminSidebarService.renderHtml())
+}

@@ -1,8 +1,8 @@
+@inject AdminSidebarService _AdminSidebarService
 @{
     ViewData["Title"] = "Xoá Database";
 }
-<h1> @ViewData["Title"]</h1>
-<hr>
+
 <p class=" alert alert-danger">Bạn có chắc muốn xoá Database?</p>
 <form method="post">
     <div class="form-group">
@@ -10,3 +10,12 @@
         <a class="btn btn-primary" asp-action="Index">Thông tin Database</a>
     </div>
 </form>
+
+@{
+    _AdminSidebarService.SetActive("DbManage", "Index", "Database");
+}
+
+@section Sidebar
+{
+    @Html.Raw(_AdminSidebarService.renderHtml())
+}

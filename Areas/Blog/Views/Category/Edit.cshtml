@@ -1,10 +1,11 @@
 @model WebTN_MVC.Models.Blog.Category
+@inject AdminSidebarService _AdminSidebarService
 
 @{
     ViewData["Title"] = "Sửa đổi chuyên mục";
 }
 
-<h1>@ViewData["Title"]</h1>
+
 
 <hr />
 <div class="row">
@@ -48,3 +49,12 @@
 }
 
 <partial name="_Summernote" model="summernoteModel"></partial>
+
+@{
+    _AdminSidebarService.SetActive("Category", "Index", "Blog");
+}
+
+@section Sidebar
+{
+    @Html.Raw(_AdminSidebarService.renderHtml())
+}

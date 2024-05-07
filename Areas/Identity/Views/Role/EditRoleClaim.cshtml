@@ -1,4 +1,5 @@
 @model EditClaimModel
+@inject AdminSidebarService _AdminSidebarService
 @{
     ViewData["Title"] = "Gán đặc tính cho role";
 }
@@ -36,3 +37,11 @@
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
 
+@{
+    _AdminSidebarService.SetActive("Role", "Index", "Identity");
+}
+
+@section Sidebar
+{
+    @Html.Raw(_AdminSidebarService.renderHtml())
+}

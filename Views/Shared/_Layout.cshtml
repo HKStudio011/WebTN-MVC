@@ -7,7 +7,8 @@
     <title>@ViewData["Title"] - WebTN MVC</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/WebTN_MVC.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css" asp-append-version="true" />
+    
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
@@ -45,13 +46,13 @@
                         </li> *@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="Contact" asp-controller="Contact"
-                                asp-action="SendContact">Liên Hệ</a>
-                        </li>
-                        @await Html.PartialAsync("_CartPartial")
-                        <partial name="_LoginPartial"></partial>
-                        <partial name="_MenuManagePartial"></partial>
-                        
+                                asp-action="SendContact"><i class="fas fa-phone-alt"></i> Liên Hệ</a>
+                        </li>                        
                     </ul>
+                    @* @await Html.PartialAsync("_CartPartial") *@
+                    <partial name="_CartPartial"></partial>
+                    <partial name="_LoginPartial"></partial>
+                    <partial name="_MenuManagePartial"></partial>
                 </div>
             </div>
         </nav>

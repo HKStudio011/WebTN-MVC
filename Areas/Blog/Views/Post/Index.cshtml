@@ -1,9 +1,10 @@
 @model IEnumerable<WebTN_MVC.Models.Blog.Post>
+@inject AdminSidebarService _AdminSidebarService
 
 @{
     ViewData["Title"] = "Danh sách bài viết";
 }
-<h1>@ViewData["Title"]</h1>
+
 @* <partial name="_AlertMessage" /> *@
 <p>
     <a class="btn btn-primary" asp-action="Create">Tạo bài viết mới</a>
@@ -65,3 +66,11 @@
 </table>
 
 <partial name="_PagingXTL" model="@ViewBag.pagingmodel" />
+@{
+    _AdminSidebarService.SetActive("Post", "Index", "Blog");
+}
+
+@section Sidebar
+{
+    @Html.Raw(_AdminSidebarService.renderHtml())
+}

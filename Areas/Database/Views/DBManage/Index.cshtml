@@ -1,6 +1,7 @@
 @using Microsoft.EntityFrameworkCore
 @using System.Data;
 
+@inject AdminSidebarService _AdminSidebarService
 @inject AppDBContext dBContext
 
 @{
@@ -71,4 +72,13 @@ else
     </ul>
     <a class="btn btn-primary" asp-action="SendData">Send Data</a>
     <a class="btn btn-danger" asp-action="DeleteDB">Xoá Database</a>
+}
+
+@{
+    _AdminSidebarService.SetActive("DbManage", "Index", "Database");
+}
+
+@section Sidebar
+{
+    @Html.Raw(_AdminSidebarService.renderHtml())
 }

@@ -1,11 +1,11 @@
 @model WebTN_MVC.Areas.Product.Models.CreateProductModel
-
+    @inject AdminSidebarService _AdminSidebarService
 @{
     ViewData["Title"] = "Thêm sản phẩm";
     var list = ViewData["categories"] as MultiSelectList;
 }
 
-<h1>@ViewData["Title"]</h1>
+
 
 <hr />
 <div class="row">
@@ -81,4 +81,13 @@
     </script>
 
     <partial name="_ValidationScriptsPartial" />
+}
+
+@{
+    _AdminSidebarService.SetActive("ProductManage", "Create", "Product");
+}
+
+@section Sidebar
+{
+    @Html.Raw(_AdminSidebarService.renderHtml())
 }

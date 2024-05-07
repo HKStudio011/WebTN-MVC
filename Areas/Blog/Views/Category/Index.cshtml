@@ -1,12 +1,11 @@
 @using WebTN_MVC.Models.Blog
+@inject AdminSidebarService _AdminSidebarService
 
 @model IEnumerable<Category>
 
 @{
     ViewData["Title"] = "Chuyên mục Blog";
 }
-
-<h1>@ViewData["Title"]</h1>
 
 <p>
     <a asp-action="Create" class="btn btn-primary btn-sm">Tạo chuyên mục</a>
@@ -60,3 +59,13 @@
         }
     }
 }
+
+@{
+    _AdminSidebarService.SetActive("Category", "Index", "Blog");
+}
+
+@section Sidebar
+{
+    @Html.Raw(_AdminSidebarService.renderHtml())
+}
+

@@ -1,10 +1,8 @@
 @model WebTN_MVC.Models.Contact.Contact
-
+@inject AdminSidebarService _AdminSidebarService
 @{
     ViewData["Title"] = "Thông tin liên hệ";
 }
-
-<h1>@ViewData["Title"]</h1>
 
 <div>
     <hr />
@@ -44,3 +42,11 @@
 <div>
     <a asp-action="Index">Danh sách liên hệ</a>
 </div>
+
+@{
+    _AdminSidebarService.SetActive("Contact", "Index", "Contact");
+}
+@section Sidebar
+{
+    @Html.Raw(_AdminSidebarService.renderHtml())
+}

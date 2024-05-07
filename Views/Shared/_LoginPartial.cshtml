@@ -11,10 +11,10 @@
         <ul class="nav navbar-nav navbar-right">
             <li class="nav-item">
                 <a class="nav-link text-light" asp-area="Identity" asp-controller="Manage" asp-action="Index"
-                    title="Manage">Xin chào @UserManager.GetUserName(User)!</a>
+                    title="Manage"><i class="far fa-user"></i> @UserManager.GetUserName(User)!</a>
             </li>
             <li class="nav-item">
-                <button type="submit" class="btn navbar-btn navbar-link text-light">Đăng xuất</button>
+                <button title="Đăng xuất" type="submit" class="btn navbar-btn navbar-link text-light"><i class="fas fa-sign-out-alt"></i></button>
             </li>
         </ul>
     </form>
@@ -22,11 +22,11 @@
 else
 {
     <ul class="nav navbar-nav navbar-right">
-        <li class="nav-item">
+        @* <li class="nav-item">
             <a class="nav-link text-light" asp-area="Identity" asp-controller="Account" asp-action="Register">Đăng ký</a>
-        </li>
+        </li> *@
         <li class="nav-item">
-            <a class="nav-link text-light" asp-area="Identity" asp-controller="Account" asp-action="Login">Đăng nhập</a>
+            <a title="Đăng nhập" class="nav-link text-light" asp-area="Identity" asp-controller="Account" asp-action="Login"><i class="fas fa-sign-in-alt"></i></a>
         </li>
     </ul>
 }

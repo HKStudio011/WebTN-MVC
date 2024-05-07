@@ -1,11 +1,11 @@
 @model WebTN_MVC.Areas.Blog.Models.CreatePostModel
+@inject AdminSidebarService _AdminSidebarService
 
 @{
     ViewData["Title"] = "Thêm bài viêt Blog";
     var list = ViewData["categories"] as MultiSelectList;
 }
 
-<h1>@ViewData["Title"]</h1>
 
 <hr />
 <div class="row">
@@ -76,4 +76,13 @@
     </script>
 
     <partial name="_ValidationScriptsPartial" />
+}
+
+@{
+    _AdminSidebarService.SetActive("Post", "Create", "Blog");
+}
+
+@section Sidebar
+{
+    @Html.Raw(_AdminSidebarService.renderHtml())
 }

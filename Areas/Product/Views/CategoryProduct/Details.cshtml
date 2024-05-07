@@ -1,10 +1,8 @@
 @model WebTN_MVC.Models.Product.CategoryProduct
-
+@inject AdminSidebarService _AdminSidebarService
 @{
     ViewData["Title"] = Model.Title;
 }
-
-<h1>@ViewData["Title"]</h1>
 
 <div>
     <hr />
@@ -27,3 +25,12 @@
     <a asp-action="Edit" asp-route-id="@Model?.Id">Chỉnh sửa</a> |
     <a asp-action="Index">Danh sách chuyên mục sản phẩm</a>
 </div>
+
+@{
+    _AdminSidebarService.SetActive("CategoryProduct", "Index", "Product");
+}
+
+@section Sidebar
+{
+    @Html.Raw(_AdminSidebarService.renderHtml())
+}

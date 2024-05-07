@@ -6,6 +6,8 @@ using WebTN_MVC.Models;
 using WebTN_MVC.Services;
 using WebTN_MVC.Data;
 using Microsoft.Extensions.FileProviders;
+using WebTN_MVC.Menu;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -107,6 +109,9 @@ builder.Services.AddSession(cfg => {                    // Đăng ký dịch v�
 });
 
 builder.Services.AddTransient<CartService>();
+
+builder.Services.AddTransient<IActionContextAccessor,ActionContextAccessor>();
+builder.Services.AddTransient<AdminSidebarService>();
 
 var app = builder.Build();
 

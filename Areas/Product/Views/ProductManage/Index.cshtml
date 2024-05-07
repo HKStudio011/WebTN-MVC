@@ -1,9 +1,10 @@
 @model IEnumerable<WebTN_MVC.Models.Product.Product>
+    @inject AdminSidebarService _AdminSidebarService
 
 @{
     ViewData["Title"] = "Danh sách sản phẩm";
 }
-<h1>@ViewData["Title"]</h1>
+
 @* <partial name="_AlertMessage" /> *@
 <p>
     <a class="btn btn-primary" asp-action="Create">Tạo sản phẩm mới</a>
@@ -71,3 +72,12 @@
 </table>
 
 <partial name="_PagingXTL" model="@ViewBag.pagingmodel" />
+
+@{
+    _AdminSidebarService.SetActive("ProductManage", "Index", "Product");
+}
+
+@section Sidebar
+{
+    @Html.Raw(_AdminSidebarService.renderHtml())
+}

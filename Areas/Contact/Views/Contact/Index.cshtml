@@ -1,10 +1,8 @@
 @model IEnumerable<WebTN_MVC.Models.Contact.Contact>
-
+@inject AdminSidebarService _AdminSidebarService
 @{
     ViewData["Title"] = "Danh sách liên hệ";
 }
-
-<h1>@ViewData["Title"]</h1>
 
 <table class="table">
     <thead>
@@ -48,3 +46,11 @@
         }
     </tbody>
 </table>
+
+@{
+    _AdminSidebarService.SetActive("Contact", "Index", "Contact");
+}
+@section Sidebar
+{
+    @Html.Raw(_AdminSidebarService.renderHtml())
+}
