@@ -113,6 +113,12 @@ builder.Services.AddTransient<CartService>();
 builder.Services.AddTransient<IActionContextAccessor,ActionContextAccessor>();
 builder.Services.AddTransient<AdminSidebarService>();
 
+// config web host
+builder.WebHost.ConfigureKestrel((context, serverOptions) =>
+{
+    serverOptions.Listen(IPAddress.Any, 5144);
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline .

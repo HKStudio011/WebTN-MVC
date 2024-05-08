@@ -12,7 +12,6 @@ namespace WebTN_MVC.Areas.Database.Controllers
 {
     [Area("Database")]
     [Route("/database-manage/{action}")]
-    [Authorize(Roles = RoleName.Administrator)]
     public class DBManage : Controller
     {
         private readonly AppDBContext _dBContext;
@@ -38,12 +37,14 @@ namespace WebTN_MVC.Areas.Database.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = RoleName.Administrator)]
         public IActionResult DeleteDB()
         {
             return View();
         }
 
         [HttpPost]
+        [Authorize(Roles = RoleName.Administrator)]
         public async Task<IActionResult> DeleteDBAsync()
         {
             var success = await _dBContext.Database.EnsureDeletedAsync();
@@ -84,9 +85,23 @@ namespace WebTN_MVC.Areas.Database.Controllers
                 };
                 await _userManager.CreateAsync(admin, password: "admin123");
                 await _userManager.AddToRoleAsync(admin, RoleName.Administrator);
-            }
+                await _signInManager.SignInAsync(admin, false);
 
-            await _signInManager.SignInAsync(admin,isPersistent:false);
+                return RedirectToAction("SeedData");
+                
+            }
+            else 
+            {
+                var user = await _userManager.GetUserAsync(this.User);
+                if (user == null) return this.Forbid();
+                var roles = await _userManager.GetRolesAsync(user);
+
+                if (!roles.Any(r => r == RoleName.Administrator))
+                {
+                    return this.Forbid();
+                }
+
+            }
 
             SenDPostCategory();
             SeedProductCategory();
