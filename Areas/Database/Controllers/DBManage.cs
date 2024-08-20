@@ -87,7 +87,7 @@ namespace WebTN_MVC.Areas.Database.Controllers
                 await _userManager.AddToRoleAsync(admin, RoleName.Administrator);
                 await _signInManager.SignInAsync(admin, false);
 
-                return RedirectToAction("SeedData");
+                return RedirectToAction("SendData");
                 
             }
             else 
