@@ -497,7 +497,7 @@ namespace WebTN_MVC.Areas.Identity.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View();
+                return View(model);
             }
 
             var user = await _signInManager.GetTwoFactorAuthenticationUserAsync();

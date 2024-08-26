@@ -12,6 +12,6 @@ namespace WebTN_MVC.Areas.Identity.Models.AccountViewModels
         [Display(Name = "Nhập mã phục hồi đã lưu")]
         public string Code { get; set; }
 
-        public string ReturnUrl { get; set; }
+        public string? ReturnUrl { get; set; }
     }
 }

@@ -11,7 +11,7 @@ namespace WebTN_MVC.Areas.Identity.Models.AccountViewModels
         [Display(Name = "Nhập mã đã lưu")]
         public string Code { get; set; }
 
-        public string ReturnUrl { get; set; }
+        public string? ReturnUrl { get; set; }
 
         [Display(Name = "Nhớ thông tin trình duyệt này?")]
         public bool RememberBrowser { get; set; }
